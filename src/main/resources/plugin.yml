@@ -1,0 +1,4 @@
+name: Parkour
+version: '${project.version}'
+main: dev.parkour.Parkour
+api-version: '1.16'
