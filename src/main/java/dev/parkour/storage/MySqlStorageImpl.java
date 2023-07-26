@@ -51,7 +51,7 @@ public class MySqlStorageImpl implements Storage<HikariDataSource> {
             statement.addBatch(
                     "CREATE TABLE IF NOT EXISTS " + "park_"
                             + "completed_maps (id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, uuid VARCHAR(36) NOT NULL," +
-                            " mape_name VARCHAR(32) NOT NULL, best_time_ms BIGINT, completion_count INT, games_played_count INT)"
+                            " map_name VARCHAR(32) NOT NULL, best_time_ms BIGINT, completion_count INT, games_played_count INT)"
             );
             statement.executeBatch();
         }
@@ -97,7 +97,7 @@ public class MySqlStorageImpl implements Storage<HikariDataSource> {
             try (Connection connection = hikariDataSource.getConnection();
                  PreparedStatement statement = connection.prepareStatement(
                          "UPDATE " + "park_"
-                                 + "completed_maps SET lowest_record=?, completions=?, games_played=? WHERE map=? AND uuid=?"
+                                 + "completed_maps SET best_time_ms=?, completion_count=?, games_played_count=? WHERE map_name=? AND uuid=?"
                  )) {
                 statement.setLong(1, record.getLowestRecord());
                 statement.setInt(2, record.getCompletions());
@@ -108,7 +108,7 @@ public class MySqlStorageImpl implements Storage<HikariDataSource> {
                 if (statement.getUpdateCount() == 0) {
                     PreparedStatement insertStatement = connection.prepareStatement(
                             "INSERT INTO " + "park_"
-                                    + "completed_maps (uuid, map, lowest_record, completions, games_played) VALUES (?, ?, ?, ?, ?)"
+                                    + "completed_maps (uuid, map_name, best_time_ms, completion_count, games_played_count) VALUES (?, ?, ?, ?, ?)"
                     );
                     insertStatement.setString(1, uuid.toString());
                     insertStatement.setString(2, record.getMap().getKey());

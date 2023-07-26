@@ -3,10 +3,13 @@ package dev.parkour.core.listeners;
 import dev.parkour.Parkour;
 import dev.parkour.api.map.ParkourMap;
 import dev.parkour.api.map.enums.CompletionReason;
+import dev.parkour.api.map.locations.PointType;
 import dev.parkour.api.map.sessions.ParkourSession;
 import dev.parkour.api.structure.ParkourMapManager;
 import dev.parkour.api.users.User;
 import dev.parkour.api.users.UserManager;
+import dev.parkour.maps.points.BuilderPoint;
+import dev.parkour.maps.points.CheckPointMap;
 import dev.parkour.maps.points.PointMap;
 import dev.parkour.records.MapRecord;
 import dev.parkour.utils.TimeUtil;
@@ -43,8 +46,6 @@ public class GameEvents implements Listener {
         Block clickedBlock = event.getClickedBlock();
         if (parkourPlayer == null || clickedBlock == null)
             return;
-
-        ItemStack item = event.getItem();
         if (event.getAction() == Action.PHYSICAL && clickedBlock.getType().name().contains("PLATE")) {
             event.setCancelled(true);
             if (parkourPlayer.Session() == null) {
@@ -55,14 +56,12 @@ public class GameEvents implements Listener {
                     if (plateLocation.getBlockX() == startPointLocation.getBlockX() &&
                             plateLocation.getBlockY() == startPointLocation.getBlockY() &&
                             plateLocation.getBlockZ() == startPointLocation.getBlockZ()) {
-                        if (!parkourPlayer.isEligable(map)) {
-                            return;
-                        }
-                        if(player.getGameMode() != GameMode.ADVENTURE) {
+                        if (player.getGameMode() != GameMode.ADVENTURE) {
                             player.setGameMode(GameMode.ADVENTURE);
                         }
                         for (PotionEffect activePotionEffect : player.getActivePotionEffects()) {
-                            if(activePotionEffect.getType() != PotionEffectType.JUMP || activePotionEffect.getType() != PotionEffectType.SPEED)continue;
+                            if (activePotionEffect.getType() != PotionEffectType.JUMP || activePotionEffect.getType() != PotionEffectType.SPEED)
+                                continue;
                             player.removePotionEffect(activePotionEffect.getType());
                         }
                         CompletableFuture.supplyAsync(() -> {
@@ -82,11 +81,11 @@ public class GameEvents implements Listener {
             } else {
                 final ParkourSession session = parkourPlayer.Session();
                 final ParkourMap map = session.getCurrentMap();
-                final PointMap checkPoint = map.getPoint(clickedBlock.getLocation());
-
+                final CheckPointMap checkPoint = map.getPoint(clickedBlock.getLocation());
                 if (checkPoint == null) {
-                    if (map.getEndLocation() == null)
+                    if (map.getEndLocation() == null) {
                         return;
+                    }
                     final Location plateLocation = clickedBlock.getLocation(),
                             endPointLocation = map.getEndLocation().getLocation();
                     if (plateLocation.getBlockX() == endPointLocation.getBlockX() &&
@@ -97,7 +96,7 @@ public class GameEvents implements Listener {
                             if (!coolDownUsers.contains(player.getUniqueId())) {
                                 player.sendMessage(ChatColor.RED + "You must reach all the checkpoints before finishing the map!");
                                 coolDownUsers.add(player.getUniqueId());
-                                Bukkit.getScheduler().runTaskLater( Parkour.getInstance(),
+                                Bukkit.getScheduler().runTaskLater(Parkour.getInstance(),
                                         () -> coolDownUsers.remove(player.getUniqueId()), 60L);
                             }
                             return;
@@ -127,24 +126,30 @@ public class GameEvents implements Listener {
                     }
                     return;
                 }
-                // Check if the player passed this checkpoint.
+
+                System.out.println("Check point order" + checkPoint.getOrder());
                 if (checkPoint.getOrder() <= session.getCurrentCheckpoint())
                     return;
-                // Check if the player skipped the previous checkpoint.
-                if (checkPoint.getOrder() > session.getCurrentCheckpoint() + 1) {
-                    if (!coolDownUsers.contains(player.getUniqueId())) {
-                        player.sendMessage(ChatColor.RED + "You have skipped checkpoint #"
-                                + session.getCurrentCheckpoint() + 1 + ", please go back and pass it!");
-                        coolDownUsers.add(player.getUniqueId());
-                        Bukkit.getScheduler().runTaskLater(Parkour.getInstance(),
-                                () -> coolDownUsers.remove(player.getUniqueId()), 60L);
+
+                   // if (checkPoint.getOrder() <= session.getCurrentCheckpoint())
+                   //     return;
+                    // Check if the player skipped the previous checkpoint.
+                    if (checkPoint.getOrder() > session.getCurrentCheckpoint() + 1) {
+                        System.out.println(" + 1 order");
+                        if (!coolDownUsers.contains(player.getUniqueId())) {
+                            player.sendMessage(ChatColor.RED + "You have skipped checkpoint #"
+                                    + session.getCurrentCheckpoint() + 1 + ", please go back and pass it!");
+                            coolDownUsers.add(player.getUniqueId());
+                            Bukkit.getScheduler().runTaskLater(Parkour.getInstance(),
+                                    () -> coolDownUsers.remove(player.getUniqueId()), 60L);
+                        }
+                        return;
                     }
-                    return;
-                }
-                if (session.setCurrentCheckpoint(checkPoint)) {
-                    player.sendMessage(ChatColor.YELLOW + "You've reached checkpoint #" + checkPoint.getOrder());
-                    event.setCancelled(true);
-                    player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 10F, 2F);
+                    if (session.setCurrentCheckpoint(checkPoint)) {
+                        System.out.println("check point");
+                        player.sendMessage(ChatColor.YELLOW + "You've reached checkpoint #" + checkPoint.getOrder());
+                        event.setCancelled(true);
+                        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 10F, 2F);
                 }
             }
         }

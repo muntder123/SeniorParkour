@@ -6,6 +6,8 @@ import dev.parkour.Parkour;
 import dev.parkour.api.LocationTypeAdapter;
 import dev.parkour.api.map.ParkourMap;
 import dev.parkour.api.structure.ParkourMapManager;
+import dev.parkour.maps.points.CheckPointMap;
+import dev.parkour.maps.points.PointAdapter;
 import dev.parkour.maps.points.PointMap;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +27,7 @@ public class ParkourManagerImpl implements ParkourMapManager {
         this.instance = parkour;
         this.gson = new GsonBuilder().setPrettyPrinting().serializeNulls()
                 .excludeFieldsWithoutExposeAnnotation().registerTypeAdapter(
-                        PointMap.class, new LocationTypeAdapter()).create();
+                        PointMap.class, new LocationTypeAdapter()).registerTypeAdapter(CheckPointMap.class,new PointAdapter()).create();
         this.maps = new HashMap<>();
     }
 

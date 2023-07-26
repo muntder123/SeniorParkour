@@ -36,7 +36,7 @@ public class UserImpl implements User {
 
     @Override
     public MapRecord getMapRecord(ParkourMap map) {
-        return null;
+        return recordMap.get(map);
     }
 
     @Override

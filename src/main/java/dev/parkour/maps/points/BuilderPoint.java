@@ -1,8 +1,9 @@
 package dev.parkour.maps.points;
 
 import dev.parkour.api.map.locations.PointType;
+import lombok.Getter;
 import org.bukkit.Location;
-
+@Getter
 public class BuilderPoint {
     private Location location;
     private PointType type;

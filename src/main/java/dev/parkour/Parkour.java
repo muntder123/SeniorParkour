@@ -12,9 +12,11 @@ import dev.parkour.core.listeners.GameEvents;
 import dev.parkour.core.listeners.UserJoin;
 import dev.parkour.maps.ParkourManagerImpl;
 import dev.parkour.core.users.UserManagerImpl;
+import dev.parkour.placeholders.PlaceHolderHook;
 import dev.parkour.storage.MySqlStorageImpl;
 import games.negative.framework.BasePlugin;
 import lombok.Getter;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -47,6 +49,7 @@ public final class Parkour extends BasePlugin {
         this.userManager = new UserManagerImpl(this);
         Bukkit.getPluginManager().registerEvents(new UserJoin(),this);
         Bukkit.getPluginManager().registerEvents(new GameEvents(),this);
+        new PlaceHolderHook().register();
 
     }
 

@@ -1,6 +1,7 @@
 package dev.parkour.menus;
 
 import dev.parkour.api.map.ParkourMap;
+import dev.parkour.maps.points.CheckPointMap;
 import dev.parkour.maps.points.PointMap;
 import games.negative.framework.gui.GUI;
 import games.negative.framework.util.Utils;
@@ -24,7 +25,7 @@ public class PointsMenu extends GUI {
     }
 
     private void addPointsItems() {
-        List<PointMap> points = parkourMap.getPoints();
+        List<CheckPointMap> points = parkourMap.getPoints();
         int slot = 0;
         for (PointMap point : points) {
             Location pointLocation = point.getLocation();

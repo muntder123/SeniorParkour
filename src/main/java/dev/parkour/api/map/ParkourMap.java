@@ -1,6 +1,7 @@
 package dev.parkour.api.map;
 
 import dev.parkour.api.structure.Identified;
+import dev.parkour.maps.points.CheckPointMap;
 import dev.parkour.maps.points.PointMap;
 import org.bukkit.Location;
 
@@ -21,9 +22,9 @@ public interface ParkourMap extends Keyd<String>, Identified {
     boolean setCheckpoint(int order, Location location);
     void setEndLocation(PointMap checkPointMap);
 
-    List<PointMap> getPoints();
+    List<CheckPointMap> getPoints();
 
-    PointMap getPoint( Location location);
+    CheckPointMap getPoint( Location location);
     PointMap getPoint(int ordering);
 
 

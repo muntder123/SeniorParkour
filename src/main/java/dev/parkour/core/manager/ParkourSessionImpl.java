@@ -2,10 +2,12 @@ package dev.parkour.core.manager;
 
 import dev.parkour.api.map.ParkourMap;
 import dev.parkour.api.map.enums.CompletionReason;
+import dev.parkour.api.map.events.UserCheckPointReachEvent;
 import dev.parkour.api.map.events.UserGameEndEvent;
 import dev.parkour.api.map.sessions.ParkourSession;
 import dev.parkour.api.users.User;
 import dev.parkour.core.users.UserImpl;
+import dev.parkour.maps.points.CheckPointMap;
 import dev.parkour.maps.points.PointMap;
 import org.bukkit.Bukkit;
 
@@ -37,13 +39,13 @@ public class ParkourSessionImpl implements ParkourSession {
     }
 
     @Override
-    public boolean setCurrentCheckpoint(PointMap checkpoint) {
-        int newCheckpointIndex = currentMap.getPoints().indexOf(checkpoint);
-        if (newCheckpointIndex >= 0) {
-            this.currentCheckpointIndex = newCheckpointIndex;
-            return true;
-        }
-        return false;
+    public boolean setCurrentCheckpoint(CheckPointMap checkpoint) {
+        UserCheckPointReachEvent userCheckPointReachEvent = new UserCheckPointReachEvent(this.user,this,checkpoint);
+        Bukkit.getPluginManager().callEvent(userCheckPointReachEvent);
+        if (userCheckPointReachEvent.isCancelled())
+            return false;
+        this.currentCheckpointIndex = userCheckPointReachEvent.getCheckPoint().getOrder();
+        return true;
     }
 
     @Override
@@ -64,6 +66,6 @@ public class ParkourSessionImpl implements ParkourSession {
             }
         }
         user.updateSessionCache(null);
-        return false;
+        return true;
     }
 }

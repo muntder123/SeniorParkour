@@ -11,7 +11,6 @@ public class TimeUtil {
     /**
      * @param millis Milliseconds to format.
      * @return Formatted time into string.
-     * @author ChatGPT
      */
     public static String formatTime(long millis, boolean shortened) {
         if (millis < 0) {

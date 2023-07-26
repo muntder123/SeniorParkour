@@ -2,6 +2,7 @@ package dev.parkour.api.map.sessions;
 
 import dev.parkour.api.map.ParkourMap;
 import dev.parkour.api.map.enums.CompletionReason;
+import dev.parkour.maps.points.CheckPointMap;
 import dev.parkour.maps.points.PointMap;
 
 public interface ParkourSession {
@@ -39,7 +40,7 @@ public interface ParkourSession {
      * @param checkpoint The new checkpoint to update for the player.
      * @return If the checkpoint update is successful.
      */
-    boolean setCurrentCheckpoint(PointMap checkpoint);
+    boolean setCurrentCheckpoint(CheckPointMap checkpoint);
 
     /**
      * Attempts to end the user's session.

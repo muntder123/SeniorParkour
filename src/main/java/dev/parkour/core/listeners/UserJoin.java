@@ -21,13 +21,18 @@ public class UserJoin implements Listener {
 
     @EventHandler
     public void PlayerJoinEvent(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        userManager.loadPlayer(player.getUniqueId()).thenAccept(userManager::cache);
+       final Player player = event.getPlayer();
+        userManager.loadPlayer(player.getUniqueId()).thenAccept(userManager::cache).thenRun(() -> {
+            //toDo
+        }).exceptionally(throwable -> {
+            throwable.printStackTrace();
+            return null;
+        });
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
+       final Player player = event.getPlayer();
         User pp = userManager.getPlayer(player.getUniqueId());
         if (pp.Session() != null) {
             userManager.getPlayer(player.getUniqueId()).Session().endSession(CompletionReason.ForcedCompletionReason);

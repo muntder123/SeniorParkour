@@ -42,8 +42,13 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     public void cache(User player) {
-        if (this.map.containsKey(player.uuid())) this.map.replace(player.uuid(), player);
+        if (this.map.containsKey(player.uuid())) {
+            this.map.replace(player.uuid(), player);
+            System.out.println("replcing data " + player.uuid());
+        }
+
         else this.map.put(player.uuid(), player);
+        System.out.println("putting data.");
     }
 
     @Override

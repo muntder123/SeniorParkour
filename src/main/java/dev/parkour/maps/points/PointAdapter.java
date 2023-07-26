@@ -1,18 +1,16 @@
-package dev.parkour.api;
+package dev.parkour.maps.points;
 
 import com.google.gson.*;
-import dev.parkour.api.map.locations.PointType;
-import dev.parkour.maps.points.BuilderPoint;
-import dev.parkour.maps.points.PointMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 import java.lang.reflect.Type;
 
-public class LocationTypeAdapter implements JsonSerializer<PointMap>, JsonDeserializer<PointMap> {
-@Override
-public JsonElement serialize(PointMap mapPoint, Type typeOfSrc, JsonSerializationContext context) {
+public class PointAdapter implements JsonSerializer<CheckPointMap>, JsonDeserializer<CheckPointMap> {
+    @Override
+    public JsonElement serialize(CheckPointMap mapPoint, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("order",mapPoint.getOrder());
         jsonObject.addProperty("world", mapPoint.getLocation().getWorld().getName());
         jsonObject.addProperty("x", mapPoint.getLocation().getX());
         jsonObject.addProperty("y", mapPoint.getLocation().getY());
@@ -21,11 +19,12 @@ public JsonElement serialize(PointMap mapPoint, Type typeOfSrc, JsonSerializatio
         jsonObject.addProperty("pitch", mapPoint.getLocation().getPitch());
 
         return jsonObject;
-        }
+    }
 
     @Override
-    public PointMap deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public CheckPointMap deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject jsonObject = json.getAsJsonObject();
+        int order = jsonObject.get("order").getAsInt();
         String world = jsonObject.get("world").getAsString();
         double x = jsonObject.get("x").getAsDouble();
         double y = jsonObject.get("y").getAsDouble();
@@ -33,6 +32,6 @@ public JsonElement serialize(PointMap mapPoint, Type typeOfSrc, JsonSerializatio
         float yaw = jsonObject.get("yaw").getAsFloat();
         float pitch = jsonObject.get("pitch").getAsFloat();
         Location location = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
-        return new BuilderPoint().withLocation(location).build();
+        return new CheckPointMap(location,order);
     }
 }

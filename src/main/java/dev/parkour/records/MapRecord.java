@@ -11,7 +11,6 @@ public interface MapRecord {
 
     /**
      * @return Lowest taken time to finish the map.
-     * @since 1.2-ALPHA
      */
     long getLowestRecord();
 
@@ -20,13 +19,11 @@ public interface MapRecord {
      * and then save it into the database.
      *
      * @param record New record to set.
-     * @since 1.2-ALPHA
      */
     void setLowestRecord(long record);
 
     /**
      * @return Map completions times.
-     * @since 1.2-ALPHA
      */
     int getCompletions();
 
@@ -34,13 +31,11 @@ public interface MapRecord {
      * Updates completions times.
      *
      * @param completions New completions times value.
-     * @since 1.2-ALPHA
      */
     void setCompletions(int completions);
 
     /**
      * @return How many times did the player play on this map.
-     * @since 1.2-ALPHA
      */
     int getGamesPlayed();
 
@@ -49,7 +44,6 @@ public interface MapRecord {
      * and save it into the database.
      *
      * @param gamesPlayed New value to set.
-     * @since 1.2-ALPHA
      */
     void setGamesPlayed(int gamesPlayed);
 }
