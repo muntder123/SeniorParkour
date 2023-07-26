@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: games.negative.framework:minecraft-framework:3.2.5">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/games/negative/framework/minecraft-framework/3.2.5/minecraft-framework-3.2.5.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/games/negative/framework/minecraft-framework/3.2.5/minecraft-framework-3.2.5-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/games/negative/framework/minecraft-framework/3.2.5/minecraft-framework-3.2.5-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

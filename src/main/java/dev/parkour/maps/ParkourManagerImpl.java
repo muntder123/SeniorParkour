@@ -3,8 +3,10 @@ package dev.parkour.maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dev.parkour.Parkour;
+import dev.parkour.api.LocationTypeAdapter;
 import dev.parkour.api.map.ParkourMap;
 import dev.parkour.api.structure.ParkourMapManager;
+import dev.parkour.maps.points.PointMap;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,7 +23,9 @@ public class ParkourManagerImpl implements ParkourMapManager {
 
     public ParkourManagerImpl(Parkour parkour){
         this.instance = parkour;
-        this.gson = new GsonBuilder().serializeNulls().create();
+        this.gson = new GsonBuilder().setPrettyPrinting().serializeNulls()
+                .excludeFieldsWithoutExposeAnnotation().registerTypeAdapter(
+                        PointMap.class, new LocationTypeAdapter()).create();
         this.maps = new HashMap<>();
     }
 
