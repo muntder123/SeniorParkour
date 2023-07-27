@@ -122,6 +122,26 @@ public class MySqlStorageImpl implements Storage<HikariDataSource> {
             }
         });
     }
+    @Override
+    public CompletableFuture<Integer> getPlayersWithBetterTimeCount(String mapName, long playerBestTime) {
+        return CompletableFuture.supplyAsync(() -> {
+            try (Connection connection = hikariDataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement(
+                         "SELECT COUNT(*) FROM " + "park_" + "completed_maps WHERE map_name=? AND best_time_ms <= ?"
+                 )) {
+                statement.setString(1, mapName);
+                statement.setLong(2, playerBestTime);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        return resultSet.getInt(1);
+                    }
+                }
+            } catch (SQLException exception) {
+                throw new RuntimeException("Could not retrieve players count for " + mapName, exception);
+            }
+            return 0;
+        });
+    }
 
     @Override
     public CompletableFuture<Void> clearRecords(ParkourMap map) {

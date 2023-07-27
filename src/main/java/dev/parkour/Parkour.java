@@ -13,6 +13,7 @@ import dev.parkour.core.listeners.UserJoin;
 import dev.parkour.maps.ParkourManagerImpl;
 import dev.parkour.core.users.UserManagerImpl;
 import dev.parkour.placeholders.PlaceHolderHook;
+import dev.parkour.scoreboard.GameEndScoreboard;
 import dev.parkour.storage.MySqlStorageImpl;
 import games.negative.framework.BasePlugin;
 import lombok.Getter;
@@ -27,7 +28,7 @@ public final class Parkour extends BasePlugin {
     @Getter
     private ParkourMapManager manager;
     @Getter
-    private Config settings;
+    private Config settings,scoreboard;
     @Getter
     private Storage<HikariDataSource> storage;
     @Getter
@@ -38,6 +39,7 @@ public final class Parkour extends BasePlugin {
         super.onEnable();
         instance = this;
         this.settings = new Config("settings.yml",this);
+        this.scoreboard = new Config("scoreboard.yml",this);
         this.manager = new ParkourManagerImpl(this);
         this.manager.loadMaps();
         BukkitCommandManager commandManager = new BukkitCommandManager(this);
@@ -49,6 +51,7 @@ public final class Parkour extends BasePlugin {
         this.userManager = new UserManagerImpl(this);
         Bukkit.getPluginManager().registerEvents(new UserJoin(),this);
         Bukkit.getPluginManager().registerEvents(new GameEvents(),this);
+        Bukkit.getPluginManager().registerEvents(new GameEndScoreboard(scoreboard),this);
         new PlaceHolderHook().register();
 
     }

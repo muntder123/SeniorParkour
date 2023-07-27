@@ -4,41 +4,34 @@ import dev.parkour.api.map.ParkourMap;
 import dev.parkour.api.map.enums.CompletionReason;
 import dev.parkour.api.map.events.UserCheckPointReachEvent;
 import dev.parkour.api.map.events.UserGameEndEvent;
-import dev.parkour.api.map.sessions.ParkourSession;
-import dev.parkour.api.users.User;
 import dev.parkour.core.users.UserImpl;
 import dev.parkour.maps.points.CheckPointMap;
-import dev.parkour.maps.points.PointMap;
 import org.bukkit.Bukkit;
 
-public class ParkourSessionImpl implements ParkourSession {
-    private final UserImpl user;
-    private final ParkourMap currentMap;
-    private final long startTime;
+public class ParkourSession  {
+    private UserImpl user;
+    private ParkourMap currentMap;
+    private long startTime;
     private int currentCheckpointIndex;
 
-    public ParkourSessionImpl(final UserImpl user,ParkourMap currentMap) {
+    public ParkourSession(final UserImpl user,ParkourMap currentMap) {
         this.user = user;
         this.currentMap = currentMap;
         this.startTime = System.currentTimeMillis();
         this.currentCheckpointIndex = 0;
     }
-    @Override
     public ParkourMap getCurrentMap() {
         return currentMap;
     }
 
-    @Override
     public long getStartTime() {
         return startTime;
     }
 
-    @Override
     public int getCurrentCheckpoint() {
         return currentCheckpointIndex;
     }
 
-    @Override
     public boolean setCurrentCheckpoint(CheckPointMap checkpoint) {
         UserCheckPointReachEvent userCheckPointReachEvent = new UserCheckPointReachEvent(this.user,this,checkpoint);
         Bukkit.getPluginManager().callEvent(userCheckPointReachEvent);
@@ -48,7 +41,6 @@ public class ParkourSessionImpl implements ParkourSession {
         return true;
     }
 
-    @Override
     public boolean endSession(CompletionReason cause) {
         UserGameEndEvent gameEndEvent = new UserGameEndEvent(user,this,cause);
         //Implement a event to end it

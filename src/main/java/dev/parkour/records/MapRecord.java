@@ -1,18 +1,64 @@
 package dev.parkour.records;
 
+import dev.parkour.Parkour;
+import dev.parkour.api.Storage;
 import dev.parkour.api.map.ParkourMap;
+import dev.parkour.core.users.UserImpl;
+import lombok.RequiredArgsConstructor;
 
-public interface MapRecord {
+public class MapRecord {
 
-    /**
-     * @return The recorded map.
-     */
-    ParkourMap getMap();
+    private final UserImpl player;
+    private final ParkourMap map;
+    private long lowestRecord;
+    private int completions = 0;
+    private int gamesPlayed = 1;
 
-    /**
-     * @return Lowest taken time to finish the map.
-     */
-    long getLowestRecord();
+
+    public MapRecord(UserImpl user,ParkourMap parkourMap){
+        this.player = user;
+        this.map = parkourMap;
+    }
+
+    public ParkourMap getMap() {
+        return this.map;
+    }
+
+    public long getLowestRecord() {
+        return lowestRecord;
+    }
+
+    public int getCompletions() {
+        return completions;
+    }
+
+
+    public void setCompletions(int completions) {
+        // Update in cache
+        setCompletionsCache(completions);
+        // Update in database
+    }
+
+    public int getGamesPlayed() {
+        return gamesPlayed;
+    }
+
+    public void setGamesPlayed(int gamesPlayed) {
+        // Update in cache
+        setGamesPlayedCache(gamesPlayed);
+        // Save it in the database
+        Storage<?> storageEngine = Parkour.getInstance().getStorage();
+        storageEngine.updateRecord(player.uuid(), this)
+                .exceptionally(throwable -> {
+                    throwable.printStackTrace();
+                    return null;
+                });
+    }
+
+
+    public void setCompletionsCache(int completions) {
+        this.completions = completions;
+    }
 
     /**
      * Updates the lowest taken time into the memory
@@ -20,30 +66,37 @@ public interface MapRecord {
      *
      * @param record New record to set.
      */
-    void setLowestRecord(long record);
+    public void setLowestRecord(long record) {
+        // Update it in memory
+        setLowestRecordCache(record);
+        // Save it in the database
+        Storage<?> storageEngine = Parkour.getInstance().getStorage();
+        storageEngine.updateRecord(player.uuid(), this)
+                .exceptionally(throwable -> {
+                    throwable.printStackTrace();
+                    return null;
+                });
+    }
 
     /**
-     * @return Map completions times.
-     */
-    int getCompletions();
-
-    /**
-     * Updates completions times.
+     * This one will attempt to update the lowest record
+     * in memory only, it's only used for implementation
+     * purposes so please ignore it.
      *
-     * @param completions New completions times value.
+     * @param lowestRecord New value to cache.
      */
-    void setCompletions(int completions);
+    public void setLowestRecordCache(long lowestRecord) {
+        this.lowestRecord = lowestRecord;
+    }
 
     /**
-     * @return How many times did the player play on this map.
-     */
-    int getGamesPlayed();
-
-    /**
-     * Updates how many times did the player play in this map,
-     * and save it into the database.
+     * This one will attempt to update the games played
+     * in memory only, it's only used for implementation
+     * purposes so please ignore it.
      *
-     * @param gamesPlayed New value to set.
+     * @param gamesPlayed New value to cache.
      */
-    void setGamesPlayed(int gamesPlayed);
+    public void setGamesPlayedCache(int gamesPlayed) {
+        this.gamesPlayed = gamesPlayed;
+    }
 }

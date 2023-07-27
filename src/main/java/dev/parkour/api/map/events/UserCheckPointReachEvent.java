@@ -1,7 +1,7 @@
 package dev.parkour.api.map.events;
 
-import dev.parkour.api.map.sessions.ParkourSession;
 import dev.parkour.api.users.User;
+import dev.parkour.core.manager.ParkourSession;
 import dev.parkour.maps.points.PointMap;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;

@@ -1,8 +1,8 @@
 package dev.parkour.api.map.events;
 
 import dev.parkour.api.map.enums.CompletionReason;
-import dev.parkour.api.map.sessions.ParkourSession;
 import dev.parkour.api.users.User;
+import dev.parkour.core.manager.ParkourSession;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;

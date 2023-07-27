@@ -1,9 +1,7 @@
 package dev.parkour.api.map.events;
 
-import dev.parkour.api.map.sessions.ParkourSession;
 import dev.parkour.api.users.User;
-import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
+import dev.parkour.core.manager.ParkourSession;
 
 public abstract class UserGameEvent extends PlayerGame{
 

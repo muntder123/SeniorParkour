@@ -5,11 +5,9 @@ import dev.parkour.api.Storage;
 import dev.parkour.api.map.ParkourMap;
 import dev.parkour.api.map.enums.CompletionReason;
 import dev.parkour.api.map.events.UserGameStartEvent;
-import dev.parkour.api.map.sessions.ParkourSession;
 import dev.parkour.api.users.User;
-import dev.parkour.core.manager.ParkourSessionImpl;
+import dev.parkour.core.manager.ParkourSession;
 import dev.parkour.records.MapRecord;
-import dev.parkour.records.MapRecordImpl;
 import lombok.NonNull;
 import org.bukkit.Bukkit;
 
@@ -21,8 +19,8 @@ import java.util.concurrent.CompletableFuture;
 public class UserImpl implements User {
 
     private UUID uuid;
-    private final Map<ParkourMap, MapRecordImpl> recordMap = new HashMap<>();
-    private ParkourSession session;
+    private final Map<ParkourMap, MapRecord> recordMap = new HashMap<>();
+    private ParkourSession currentSession;
 
     public UserImpl(UUID uuid){
         this.uuid = uuid;
@@ -38,15 +36,21 @@ public class UserImpl implements User {
     public MapRecord getMapRecord(ParkourMap map) {
         return recordMap.get(map);
     }
+    @Override
+    public CompletableFuture<Integer> getPlayerPosition(String mapName, long playerBestTime) {
+        final Storage<?> storageEngine = Parkour.getInstance().getStorage();
+        return storageEngine.getPlayersWithBetterTimeCount(mapName, playerBestTime)
+                .thenApply(playersWithBetterTime -> playersWithBetterTime + 1);
+    }
 
     @Override
     public CompletableFuture<MapRecord> setLowestRecord(ParkourMap map, long timeTaken) {
         MapRecord mapRecord = getMapRecord(map);
         if (mapRecord == null) {
-            mapRecord = new MapRecordImpl(this, map);
-            recordMap.put(map, (MapRecordImpl) mapRecord);
+            mapRecord = new MapRecord(this, map);
+            recordMap.put(map, (MapRecord) mapRecord);
         }
-        final MapRecordImpl impl = (MapRecordImpl) mapRecord;
+        final MapRecord impl = (MapRecord) mapRecord;
         final Storage<?> storageEngine = Parkour.getInstance().getStorage();
         return CompletableFuture.supplyAsync(() -> {
             impl.setLowestRecordCache(timeTaken);
@@ -57,29 +61,30 @@ public class UserImpl implements User {
 
     @Override
     public ParkourSession Session() {
-        return session;
+        return currentSession;
     }
 
     @Override
     public ParkourSession setCurrentSession(@NonNull ParkourMap map) {
-        if(session != null){
-            if(!session.endSession(CompletionReason.ForcedCompletionReason)){
-                return session;
+        if(currentSession != null){
+            if(!currentSession.endSession(CompletionReason.ForcedCompletionReason)){
+                return currentSession;
             }
         }
-        ParkourSessionImpl parkourSession = new ParkourSessionImpl(this,map);
+        ParkourSession session = new ParkourSession(this,map);
         UserGameStartEvent gameStartEvent = new UserGameStartEvent(this,session);
         Bukkit.getPluginManager().callEvent(gameStartEvent);
         if(gameStartEvent.isCancelled()){
             return null;
         }
-        this.session = parkourSession;
-        return parkourSession;
+        this.currentSession = session;
+        System.out.println("Session is first one is " + currentSession + " second one is + " + session);
+        return session;
     }
 
     public void cacheData(ParkourMap parkourMap,int timetaken,int completions,int gamesPlayed){
         if (!recordMap.containsKey(parkourMap)) {
-            MapRecordImpl implementation = new MapRecordImpl(this, parkourMap);
+            MapRecord implementation = new MapRecord(this, parkourMap);
             implementation.setGamesPlayedCache(gamesPlayed);
             implementation.setCompletionsCache(completions);
             implementation.setLowestRecordCache(timetaken);
@@ -87,6 +92,6 @@ public class UserImpl implements User {
         }
     }
     public void updateSessionCache(ParkourSession session) {
-        this.session = session;
+        this.currentSession = session;
     }
 }

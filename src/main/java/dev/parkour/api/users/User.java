@@ -3,7 +3,7 @@ package dev.parkour.api.users;
 
 
 import dev.parkour.api.map.ParkourMap;
-import dev.parkour.api.map.sessions.ParkourSession;
+import dev.parkour.core.manager.ParkourSession;
 import dev.parkour.records.MapRecord;
 import lombok.NonNull;
 
@@ -16,6 +16,7 @@ public interface User {
 
 
     MapRecord getMapRecord(ParkourMap map);
+    CompletableFuture<Integer> getPlayerPosition(String mapName, long playerBestTime);
     CompletableFuture<MapRecord> setLowestRecord(ParkourMap map, long timeTaken);
 
     ParkourSession Session();
