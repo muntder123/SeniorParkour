@@ -1,0 +1,50 @@
+messages:
+  game-mechanics-started-round: "&eYou've started a parkour round in %map%, finish it as soon as possible!"
+  game-mechanics-all-checkpoints: "&cYou must reach all the checkpoints before finishing the map!"
+  game-mechanics-checkpoint-skipped: "&cYou have skipped checkpoint #%checkpoint#, please go back and pass it!"
+  game-mechanics-finish-timeout: "&eYou are out of time, sorry!"
+  game-mechanics-finished-map: "&eYou've finished %map% map in %time% %record%"
+  game-mechanics-checkpoint-reached: "&eYou've reached checkpoint #%checkpoint%#"
+  game-mechanics-must-reach-checkpoints: "&aYou must reach all CheckPoints"
+  help:
+    parkour-command-help:
+      - "&7/parkour help - Shows this list."
+      - "&7/parkour maps - Shows all maps."
+      - "&7/parkour reset - Teleport the player to the last checkpoint."
+      - "&7/parkour setup help - Shows setup help list."
+  info:
+    parkour-command-info-map-not-found: "&cThere is no map with this name."
+
+  setup-help:
+    parkour-command-setup-help:
+      - "&7/parkour setup help - Show the help list."
+      - "&7/parkour setup createmap <map> - Creates a new Parkour Map."
+      - "&7/parkour setup setspawn <map> - Sets spawn location for the map."
+      - "&7/parkour setup setstart <map> - Sets start point for the map."
+      - "&7/parkour setup setend <map> - Sets end point for the map."
+      - "&7/parkour setup clearleaderboard <map> - Clears leaderboard for the map."
+      - "&7/parkour setup setcheckpoint <map> [order] - Sets a checkpoint for the map."
+
+  setup-create:
+    parkour-command-setup-create-success: "&aMap &f%map% &ahas been successfully created."
+
+  setup-startTime:
+    parkour-command-setup-startTime-map-not-found: "&cThere is no map with this name."
+    parkour-command-setup-startTime-success: "&aStart time for map &f%map% &aset to &f%startTime% seconds."
+
+  setup-setStart:
+    parkour-command-setup-setStart-map-not-found: "&cThere is no map with this name."
+    parkour-command-setup-setStart-success: "&aStart location for map &f%map% &aset successfully."
+
+  setup-setEnd:
+    parkour-command-setup-setEnd-map-not-found: "&cThere is no map with this name."
+    parkour-command-setup-setEnd-success: "&aEnd location for map &f%map% &aset successfully."
+
+  setup-setDisplayName:
+    parkour-command-setup-setDisplayName-map-not-found: "&cThere is no map with this name."
+    parkour-command-setup-setDisplayName-success: "&aDisplay name for map &f%map% &aset to '&f%displayName%&a'."
+
+  setup-setPoint:
+    parkour-command-setup-setPoint-map-not-found: "&cThere is no map with this name."
+    parkour-command-setup-setPoint-success: "&aCheckpoint added successfully to map &f%map%&a."
+    parkour-command-setup-setPoint-fail: "&cFailed to add checkpoint to map &f%map%&c. Please try again."

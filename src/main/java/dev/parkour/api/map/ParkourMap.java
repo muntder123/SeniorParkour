@@ -14,6 +14,9 @@ public interface ParkourMap extends Keyd<String>, Identified {
 
     PointMap getStartLocation();
 
+    int StartTimeLeft();
+
+    void setStartTime(int startTime);
 
     void setStartLocation(PointMap checkPointMap);
 

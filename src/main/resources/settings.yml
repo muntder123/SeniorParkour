@@ -5,3 +5,19 @@ pool-size: 10
 password: ""
 username: ""
 database: ""
+# Hologram Settings!
+start-hologram:
+  y-offset: 0.5
+  hologram-name:
+    - '&cParkour Prologue'
+    - '&eStart'
+end-hologram:
+  y-offset: 0.5
+  hologram-name:
+    - '&cParkour Prologue'
+    - '&cEnd'
+checkpoint-hologram:
+  y-offset: 0.5
+  hologram-name:
+    - '&e&lCheckPoint'
+    - '&a%order%'

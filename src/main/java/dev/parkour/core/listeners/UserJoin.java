@@ -2,7 +2,6 @@ package dev.parkour.core.listeners;
 
 import dev.parkour.Parkour;
 import dev.parkour.api.map.enums.CompletionReason;
-import dev.parkour.api.structure.ParkourMapManager;
 import dev.parkour.api.users.User;
 import dev.parkour.api.users.UserManager;
 import org.bukkit.entity.Player;
@@ -10,12 +9,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-
 public class UserJoin implements Listener {
 
     private final UserManager userManager;
 
-    public UserJoin() {
+    public UserJoin( ){
         this.userManager = Parkour.getInstance().getUserManager();
     }
 
@@ -23,11 +21,11 @@ public class UserJoin implements Listener {
     public void PlayerJoinEvent(PlayerJoinEvent event) {
        final Player player = event.getPlayer();
         userManager.loadPlayer(player.getUniqueId()).thenAccept(userManager::cache).thenRun(() -> {
-            //toDo
         }).exceptionally(throwable -> {
             throwable.printStackTrace();
             return null;
         });
+
     }
 
     @EventHandler

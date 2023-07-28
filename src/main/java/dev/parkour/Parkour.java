@@ -10,17 +10,17 @@ import dev.parkour.api.users.UserManager;
 import dev.parkour.commands.ParkourCommands;
 import dev.parkour.core.listeners.GameEvents;
 import dev.parkour.core.listeners.UserJoin;
-import dev.parkour.maps.ParkourManagerImpl;
+import dev.parkour.core.manager.ParkourManagerImpl;
 import dev.parkour.core.users.UserManagerImpl;
+import dev.parkour.holograms.HoloManager;
+import dev.parkour.holograms.versions.HoloManagerImpl_1_16_5;
 import dev.parkour.placeholders.PlaceHolderHook;
-import dev.parkour.scoreboard.GameEndScoreboard;
+import dev.parkour.scoreboard.GameScoreboard;
 import dev.parkour.storage.MySqlStorageImpl;
 import games.negative.framework.BasePlugin;
 import lombok.Getter;
-import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Parkour extends BasePlugin {
     @Getter
@@ -28,30 +28,42 @@ public final class Parkour extends BasePlugin {
     @Getter
     private ParkourMapManager manager;
     @Getter
-    private Config settings,scoreboard;
+    private Config settings,scoreboard,messages;
     @Getter
     private Storage<HikariDataSource> storage;
     @Getter
     private UserManager userManager;
+    @Getter
+    private HoloManager<?> hologramManager;
     @Override
     public void onEnable() {
         // Plugin startup logic
         super.onEnable();
         instance = this;
+        this.hologramManager = new HoloManagerImpl_1_16_5(this);
+
         this.settings = new Config("settings.yml",this);
         this.scoreboard = new Config("scoreboard.yml",this);
+        this.messages = new Config("messages.yml",this);
+
         this.manager = new ParkourManagerImpl(this);
-        this.manager.loadMaps();
+        this.manager.loadMaps(settings);
+        this.manager.setupHolo(settings);
+
         BukkitCommandManager commandManager = new BukkitCommandManager(this);
         commandManager.setFormat(MessageType.HELP, ChatColor.YELLOW);
         commandManager.setFormat(MessageType.SYNTAX, ChatColor.RED, ChatColor.RED, ChatColor.RED);
         commandManager.registerCommand(new ParkourCommands(manager));
+
         this.storage = new MySqlStorageImpl();
         storage.init(settings);
+
         this.userManager = new UserManagerImpl(this);
+
         Bukkit.getPluginManager().registerEvents(new UserJoin(),this);
         Bukkit.getPluginManager().registerEvents(new GameEvents(),this);
-        Bukkit.getPluginManager().registerEvents(new GameEndScoreboard(scoreboard),this);
+        Bukkit.getPluginManager().registerEvents(new GameScoreboard(scoreboard),this);
+
         new PlaceHolderHook().register();
 
     }

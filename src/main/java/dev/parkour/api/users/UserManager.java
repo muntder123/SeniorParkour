@@ -11,7 +11,6 @@ public interface UserManager {
 
     User getPlayer(UUID uuid);
 
-
     void cache(User player);
 
     Collection<User> getLoadedPlayers();
