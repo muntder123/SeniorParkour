@@ -89,6 +89,12 @@ public class MapImpl implements ParkourMap {
     }
 
     @Override
+    public void removePoint(int order) {
+        getPoints().remove(order);
+    }
+
+
+    @Override
     public CheckPointMap getPoint(Location location) {
         return getPoints().stream().filter(checkPoint ->
                         checkPoint.getLocation().getBlockX() == location.getBlockX()
@@ -100,7 +106,10 @@ public class MapImpl implements ParkourMap {
 
     @Override
     public CheckPointMap getPoint(int ordering) {
-        return getPoints().get(ordering);
+        return getPoints().stream()
+                .filter(point -> point.getOrder() == ordering)
+                .findFirst()
+                .orElse(null);
     }
 
 

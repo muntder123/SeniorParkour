@@ -4,16 +4,12 @@ import dev.api.holograms.Holo;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
-import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftItemDisplay;
 import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
-import org.bukkit.entity.BlockDisplay;
-import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;

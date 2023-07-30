@@ -26,7 +26,7 @@ public interface ParkourMap extends Keyd<String>, Identified {
     void setEndLocation(PointMap checkPointMap);
 
     List<CheckPointMap> getPoints();
-
+    void removePoint(int order);
     CheckPointMap getPoint( Location location);
     PointMap getPoint(int ordering);
 

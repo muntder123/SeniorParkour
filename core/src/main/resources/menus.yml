@@ -1,5 +1,6 @@
 items:
   stats:
+    title: "&eMap Stats"
     type: DIAMOND
     displayname: "&d%map_id%"
     lore:
@@ -7,6 +8,7 @@ items:
       - "&aPos: &e#%position%"
   info:
     type: EMERALD
+    title: "&aIInfo Menu"
     displayname: "&d%map_id% Info"
     lore:
       - ""

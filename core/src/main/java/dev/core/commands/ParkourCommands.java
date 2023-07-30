@@ -12,6 +12,7 @@ import dev.core.api.map.locations.PointType;
 import dev.core.api.structure.ParkourMapManager;
 import dev.core.maps.MapImpl;
 import dev.core.maps.points.EndCheckPoint;
+import dev.core.maps.points.PointMap;
 import dev.core.maps.points.StartCheckPoint;
 import dev.core.menus.MapInfoMenu;
 import dev.core.menus.StatsMenu;
@@ -36,10 +37,11 @@ public class ParkourCommands extends BaseCommand {
     private final HologramManager<?> holoManager;
 
     private final Config messages;
-
+    private final Config menus;
     public ParkourCommands(ParkourMapManager manager) {
         this.manager = manager;
         this.messages = Parkour.getInstance().getMessages();
+        this.menus = Parkour.getInstance().getMenus();
         this.holoManager = Parkour.getInstance().getHologramManager();
     }
 
@@ -64,7 +66,8 @@ public class ParkourCommands extends BaseCommand {
 
     @Subcommand("stats")
     public void onStats(Player player) {
-        new StatsMenu(player, "Test", 3).open(player);
+        String string = menus.getConfig().getString("items.stats.title");
+        new StatsMenu(player, Utils.color(string), 3).open(player);
     }
 
     @Subcommand("Info")
@@ -76,7 +79,9 @@ public class ParkourCommands extends BaseCommand {
             player.sendMessage(Utils.color(messages.getConfig().getString("messages.info.parkour-command-info-map-not-found", "no map found.")));
             return;
         }
-        new MapInfoMenu("Parkour info", 1, parkourMap).open(player);
+        int rows = menus.getConfig().getInt("itens.info.rows");
+        String title = menus.getConfig().getString("itens.info.title");
+        new MapInfoMenu(Utils.color(title), rows, parkourMap).open(player);
     }
 
 
@@ -174,8 +179,29 @@ public class ParkourCommands extends BaseCommand {
             String successMessage = messages.getConfig().getString("messages.setup-setPoint.parkour-command-setup-setPoint-error\", \"&cSomething went wrong while adding the checkpoint.");
             player.sendMessage(Utils.color(successMessage.replace("%order%", String.valueOf(order)).replace("%map%", parkourMap.id())));
         }
+
     }
 
+    @Subcommand("delete")
+    @CommandPermission("parkour.command.delete")
+    public void onDelete(Player player,String map,int order){
+        ParkourMap parkourMap = manager.getParkourMap(map);
+        if(parkourMap == null)return;
+        PointMap point = parkourMap.getPoint(order);
+        if(point != null) {
+            parkourMap.removePoint(order);
+            for (PointMap remainingPoint : parkourMap.getPoints()) {
+                if (remainingPoint.getOrder() > order) {
+                    // Decrease the order of points greater than the removed order by 1
+                    remainingPoint.setOrder(remainingPoint.getOrder() - 1);
+                }
+            }
+
+            manager.saveMap(parkourMap);
+        }else {
+            manager.deleteMap(parkourMap,false);
+        }
+    }
     @SneakyThrows
     @Subcommand("settop")
     @CommandCompletion("map_name")

@@ -25,12 +25,16 @@ import java.util.stream.Collectors;
 
 public class ParkourManagerImpl implements ParkourMapManager {
 
+    /**
+     * Here where all magic happens ,
+     * this class where i load the map , save them in json file for each map created
+     * using Gson for the serlizing and deserlizing.
+     */
     private final Gson gson;
 
     private final Map<String, ParkourMap> maps;
     private Parkour instance;
     private final HologramManager<?> hologramManager;
-
 
     public ParkourManagerImpl(Parkour parkour) {
         this.instance = parkour;
@@ -63,11 +67,17 @@ public class ParkourManagerImpl implements ParkourMapManager {
         maps.remove(parkourMap.id(), parkourMap);
     }
 
+    /**
+     * Check if ParkourMap is registered
+     */
     @Override
     public boolean isRegistered(ParkourMap parkourMap) {
         return maps.containsKey(parkourMap.id());
     }
 
+    /**
+     * Loading parkour Maps
+     */
     @SneakyThrows
     @Override
     public void loadMaps() {
@@ -93,6 +103,10 @@ public class ParkourManagerImpl implements ParkourMapManager {
         }
     }
 
+    /**
+     * Setup Holograms for the map points , start point , end point
+     * @param config
+     */
     @Override
     public void setupHolo(Config config) {
         double checkPointDouble = config.getConfig().getDouble("checkpoint-hologram.y-offset");

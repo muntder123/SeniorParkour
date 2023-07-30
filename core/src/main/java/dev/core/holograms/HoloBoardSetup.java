@@ -23,7 +23,10 @@ public class HoloBoardSetup {
         spawnLeaderBoards();
 
     }
-    // Method to save hologram locations for a map
+
+    /**
+     *   save hologram location in the config file so can be used later when server restart .
+     * */
     public void saveHologramLocations(String mapId, Location location) throws IOException {
        locationMap.put(mapId, location);
         saveToConfig();

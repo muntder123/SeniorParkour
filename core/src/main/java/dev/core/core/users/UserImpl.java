@@ -73,10 +73,12 @@ public class UserImpl implements User {
             return null;
         }
         this.currentSession = session;
-        System.out.println("Session is first one is " + currentSession + " second one is + " + session);
         return session;
     }
 
+    /**
+     * Cache the data for the user
+     */
     public void cacheData(ParkourMap parkourMap,int timetaken,int completions,int gamesPlayed,int pos){
         if (!recordMap.containsKey(parkourMap)) {
             MapRecord implementation = new MapRecord(this, parkourMap);
@@ -87,6 +89,11 @@ public class UserImpl implements User {
             recordMap.put(parkourMap,implementation);
         }
     }
+
+    /**
+     * Update the cache
+     * @param session
+     */
     public void updateSessionCache(ParkourSession session) {
         this.currentSession = session;
     }

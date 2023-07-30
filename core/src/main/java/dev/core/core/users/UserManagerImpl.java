@@ -14,7 +14,9 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class UserManagerImpl implements UserManager {
-
+    /**
+     * UserManager responsable for User load , cache and load all Users!
+     */
     private final HashMap<UUID,User> map = new HashMap<>();
     private Parkour parkour;
 
@@ -47,11 +49,9 @@ public class UserManagerImpl implements UserManager {
     public void cache(User player) {
         if (this.map.containsKey(player.uuid())) {
             this.map.replace(player.uuid(), player);
-            System.out.println("replcing data " + player.uuid());
         }
 
         else this.map.put(player.uuid(), player);
-        System.out.println("putting data.");
     }
 
     @Override

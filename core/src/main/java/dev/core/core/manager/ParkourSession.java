@@ -32,6 +32,11 @@ public class ParkourSession  {
         return currentCheckpointIndex;
     }
 
+    /**
+     * call the UserCheckPointReachEvent / set the currentcheckpoint to the user checkpoint from the event!
+     * @param checkpoint
+     * @return
+     */
     public boolean setCurrentCheckpoint(CheckPointMap checkpoint) {
         UserCheckPointReachEvent userCheckPointReachEvent = new UserCheckPointReachEvent(this.user,this,checkpoint);
         Bukkit.getPluginManager().callEvent(userCheckPointReachEvent);
@@ -41,6 +46,12 @@ public class ParkourSession  {
         return true;
     }
 
+    /**
+     * End the current session , there are 2 type for the end
+     * -
+     * @param cause
+     * @return
+     */
     public boolean endSession(CompletionReason cause) {
         UserGameEndEvent gameEndEvent = new UserGameEndEvent(user,this,cause);
         //Implement a event to end it
