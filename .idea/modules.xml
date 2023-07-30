@@ -3,6 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Parkour.iml" filepath="$PROJECT_DIR$/Parkour.iml" />
+      <module fileurl="file://$PROJECT_DIR$/V1_16/V1_16.iml" filepath="$PROJECT_DIR$/V1_16/V1_16.iml" />
+      <module fileurl="file://$PROJECT_DIR$/V1_17/V1_17.iml" filepath="$PROJECT_DIR$/V1_17/V1_17.iml" />
+      <module fileurl="file://$PROJECT_DIR$/V1_18/V1_18.iml" filepath="$PROJECT_DIR$/V1_18/V1_18.iml" />
+      <module fileurl="file://$PROJECT_DIR$/V1_19/V1_19.iml" filepath="$PROJECT_DIR$/V1_19/V1_19.iml" />
       <module fileurl="file://$PROJECT_DIR$/api/api.iml" filepath="$PROJECT_DIR$/api/api.iml" />
       <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
     </modules>

@@ -1,8 +1,0 @@
-title: "Game End Scoreboard"
-name: "gameEndScoreboard"
-score_lines:
-  - "&aMap: %map_name%"
-  - "&bYour Best Time: %user_best_time%"
-  - "&eYour Position: #%parkour_position%"
-  - ""
-  - "&6Thanks for playing!"

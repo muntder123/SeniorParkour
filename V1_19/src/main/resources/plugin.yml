@@ -1,0 +1,4 @@
+name: V1_19
+version: '${project.version}'
+main: dev.v1_19.V1_19
+api-version: '1.18'

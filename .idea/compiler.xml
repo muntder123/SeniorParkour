@@ -6,15 +6,22 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="V1_18" />
         <module name="core" />
-        <module name="Parkour" />
+        <module name="V1_17" />
+        <module name="V1_16" />
         <module name="api" />
+        <module name="V1_19" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="api" target="1.5" />
+      <module name="api" target="1.8" />
       <module name="core" target="1.8" />
-      <module name="Parkour" target="10" />
+      <module name="Parkour" target="1.5" />
+      <module name="V1_16" target="1.8" />
+      <module name="V1_17" target="1.8" />
+      <module name="V1_18" target="1.8" />
+      <module name="V1_19" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

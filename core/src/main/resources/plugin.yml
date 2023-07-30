@@ -1,4 +1,4 @@
-name: core
+name: Parkour
 version: '${project.version}'
-main: dev.core.Core
-api-version: '1.19'
+main: dev.core.Parkour
+api-version: '1.13'

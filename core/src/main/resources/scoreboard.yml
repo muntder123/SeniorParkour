@@ -1,0 +1,8 @@
+title: "Game End Scoreboard"
+name: "gameEndScoreboard"
+score_lines:
+  - "&aMap: %map_name%"
+  - "&bTime Left: %parkour_time%"
+  - "&eYour Position: #%parkour_position%"
+  - ""
+  - "&6Thanks for playing!"
