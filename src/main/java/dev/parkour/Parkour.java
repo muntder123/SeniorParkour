@@ -13,6 +13,7 @@ import dev.parkour.core.listeners.UserJoin;
 import dev.parkour.core.manager.ParkourManagerImpl;
 import dev.parkour.core.users.UserManagerImpl;
 import dev.parkour.holograms.HoloManager;
+import dev.parkour.holograms.leaderboard.HoloUpdatePlayers;
 import dev.parkour.holograms.versions.HoloManagerImpl_1_16_5;
 import dev.parkour.placeholders.PlaceHolderHook;
 import dev.parkour.scoreboard.GameScoreboard;
@@ -28,7 +29,7 @@ public final class Parkour extends BasePlugin {
     @Getter
     private ParkourMapManager manager;
     @Getter
-    private Config settings,scoreboard,messages;
+    private Config settings,scoreboard,messages,menus;
     @Getter
     private Storage<HikariDataSource> storage;
     @Getter
@@ -45,6 +46,7 @@ public final class Parkour extends BasePlugin {
         this.settings = new Config("settings.yml",this);
         this.scoreboard = new Config("scoreboard.yml",this);
         this.messages = new Config("messages.yml",this);
+        this.menus = new Config("menus.yml",this);
 
         this.manager = new ParkourManagerImpl(this);
         this.manager.loadMaps(settings);
@@ -63,8 +65,8 @@ public final class Parkour extends BasePlugin {
         Bukkit.getPluginManager().registerEvents(new UserJoin(),this);
         Bukkit.getPluginManager().registerEvents(new GameEvents(),this);
         Bukkit.getPluginManager().registerEvents(new GameScoreboard(scoreboard),this);
-
         new PlaceHolderHook().register();
+        new HoloUpdatePlayers(this).runTaskTimer(this,20L,20L);
 
     }
 

@@ -46,14 +46,11 @@ public class GameEvents implements Listener {
         final User parkourPlayer = userManager.getPlayer(player.getUniqueId());
 
         Block clickedBlock = event.getClickedBlock();
-        System.out.println("clicking?");
         if (parkourPlayer == null || clickedBlock == null)
             return;
-        System.out.println("not null");
         if (event.getAction() == Action.PHYSICAL && clickedBlock.getType().name().contains("PLATE")) {
             event.setCancelled(true);
             if (parkourPlayer.Session() == null) {
-                System.out.println("session not null hehe");
                 for (ParkourMap map : manager.getMaps()) {
                     if (map.getStartLocation() == null) continue;
                     final Location plateLocation = clickedBlock.getLocation(),
@@ -64,6 +61,7 @@ public class GameEvents implements Listener {
                         if (player.getGameMode() != GameMode.ADVENTURE) {
                             player.setGameMode(GameMode.ADVENTURE);
                         }
+
                         for (PotionEffect activePotionEffect : player.getActivePotionEffects()) {
                             if (activePotionEffect.getType() != PotionEffectType.JUMP || activePotionEffect.getType() != PotionEffectType.SPEED)
                                 continue;
@@ -84,6 +82,13 @@ public class GameEvents implements Listener {
                         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 10F, 2F);
                         break;
                     }
+                    Bukkit.getScheduler().runTaskTimer(Parkour.getInstance(),() -> {
+                        if(player.isFlying()){
+                            if(parkourPlayer.Session() == null)return;
+                            parkourPlayer.Session().endSession(CompletionReason.ForcedCompletionReason);
+
+                        }
+                    },20L,0);
                 }
             } else {
                 final ParkourSession session = parkourPlayer.Session();
@@ -108,10 +113,6 @@ public class GameEvents implements Listener {
                                 Bukkit.getScheduler().runTaskLater(Parkour.getInstance(),
                                         () -> coolDownUsers.remove(player.getUniqueId()), 60L);
                             }
-                            return;
-                        }
-                        if(player.isFlying()){
-                            parkourPlayer.Session().endSession(CompletionReason.ForcedCompletionReason);
                             return;
                         }
 
@@ -139,7 +140,6 @@ public class GameEvents implements Listener {
                         player.sendMessage(Utils.color(finishMessage));
 
                         parkourPlayer.Session().endSession(CompletionReason.NormalCompletionReason);
-                        player.chat("/spawn");
                         player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 10F, 1F);
                     }
                     return;

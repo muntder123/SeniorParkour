@@ -5,13 +5,12 @@ import dev.parkour.Parkour;
 import dev.parkour.api.Storage;
 import dev.parkour.api.users.User;
 import dev.parkour.api.users.UserManager;
+import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class UserManagerImpl implements UserManager {
@@ -19,13 +18,17 @@ public class UserManagerImpl implements UserManager {
     private final HashMap<UUID,User> map = new HashMap<>();
     private Parkour parkour;
 
+    private List<User> loadedUsers = new ArrayList<>();
     public UserManagerImpl(Parkour parkour){
         this.parkour = parkour;
     }
+    @SneakyThrows
     @Override
     public void LoadAllUsers() {
         for(Player player : Bukkit.getOnlinePlayers()){
-            loadPlayer(player.getUniqueId()).thenAccept(this::cache);
+            CompletableFuture<User> userCompletableFuture = loadPlayer(player.getUniqueId());
+            userCompletableFuture.thenAccept(this::cache);
+            loadedUsers.add(userCompletableFuture.get());
         }
     }
 
@@ -53,6 +56,7 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     public Collection<User> getLoadedPlayers() {
-        return null;
+        return loadedUsers;
     }
+
 }

@@ -40,7 +40,7 @@ public class UserImpl implements User {
     public CompletableFuture<Integer> getPlayerPosition(String mapName, long playerBestTime) {
         final Storage<?> storageEngine = Parkour.getInstance().getStorage();
         return storageEngine.getPlayersWithBetterTimeCount(mapName, playerBestTime)
-                .thenApply(playersWithBetterTime -> playersWithBetterTime + 1);
+                .thenApply(playersWithBetterTime -> playersWithBetterTime);
     }
 
     @Override
@@ -82,12 +82,13 @@ public class UserImpl implements User {
         return session;
     }
 
-    public void cacheData(ParkourMap parkourMap,int timetaken,int completions,int gamesPlayed){
+    public void cacheData(ParkourMap parkourMap,int timetaken,int completions,int gamesPlayed,int pos){
         if (!recordMap.containsKey(parkourMap)) {
             MapRecord implementation = new MapRecord(this, parkourMap);
             implementation.setGamesPlayedCache(gamesPlayed);
             implementation.setCompletionsCache(completions);
             implementation.setLowestRecordCache(timetaken);
+            implementation.setPosition(pos);
             recordMap.put(parkourMap,implementation);
         }
     }

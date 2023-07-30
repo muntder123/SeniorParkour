@@ -1,0 +1,37 @@
+items:
+  stats:
+    type: DIAMOND
+    displayname: "&d%map_id%"
+    lore:
+      - "&eBest time: &c%time%"
+      - "&aPos: &e#%position%"
+  info:
+    type: EMERALD
+    displayname: "&d%map_id% Info"
+    lore:
+      - ""
+  checkPoints:
+    type: IRON_INGOT
+    displayname: "&aCheckPoints Menu"
+    lore:
+      - ""
+      - "&a%map_points% &bpoints!"
+  check-item:
+    title: "&aPoints Menu"
+    type: IRON_SWORD
+    displayname: "&a%point_id% "
+    lore:
+      - ""
+      - "&a%point_loc%"
+  end-point:
+    type: GOLD_INGOT
+    displayname: "&aEndPoint Location"
+    lore:
+      - ""
+      - "&a%end_point_loc% "
+  start-point:
+    type: DIAMOND_SWORD
+    displayname: "&aStartPoint Location"
+    lore:
+      - ""
+      - "&a%start_point_loc%"

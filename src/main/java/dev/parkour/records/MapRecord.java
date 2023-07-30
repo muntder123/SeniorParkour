@@ -4,6 +4,7 @@ import dev.parkour.Parkour;
 import dev.parkour.api.Storage;
 import dev.parkour.api.map.ParkourMap;
 import dev.parkour.core.users.UserImpl;
+import dev.parkour.storage.TopPlayerData;
 import lombok.RequiredArgsConstructor;
 
 public class MapRecord {
@@ -13,6 +14,7 @@ public class MapRecord {
     private long lowestRecord;
     private int completions = 0;
     private int gamesPlayed = 1;
+    private int position;
 
 
     public MapRecord(UserImpl user,ParkourMap parkourMap){
@@ -37,6 +39,11 @@ public class MapRecord {
         // Update in cache
         setCompletionsCache(completions);
         // Update in database
+    }
+
+    public int getPosition() {
+        TopPlayerData topPlayerData = Parkour.getInstance().getStorage().getTopPlayers(map).get(player.uuid());
+        return topPlayerData.getPosition();
     }
 
     public int getGamesPlayed() {
@@ -88,7 +95,9 @@ public class MapRecord {
     public void setLowestRecordCache(long lowestRecord) {
         this.lowestRecord = lowestRecord;
     }
-
+    public void setPosition(int position){
+        this.position = position;
+    }
     /**
      * This one will attempt to update the games played
      * in memory only, it's only used for implementation

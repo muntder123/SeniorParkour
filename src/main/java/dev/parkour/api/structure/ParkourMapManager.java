@@ -23,7 +23,7 @@ public interface ParkourMapManager {
     void saveMap(@NotNull  ParkourMap parkourMap);
     void saveAllMaps();
 
-    void DeleteMap(ParkourMap parkourMap,boolean deleteFile);
+    void deleteMap(ParkourMap parkourMap,boolean deleteFile);
 
     Collection<ParkourMap> getMaps();
 }

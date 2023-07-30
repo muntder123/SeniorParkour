@@ -24,7 +24,13 @@ messages:
       - "&7/parkour setup setend <map> - Sets end point for the map."
       - "&7/parkour setup clearleaderboard <map> - Clears leaderboard for the map."
       - "&7/parkour setup setcheckpoint <map> [order] - Sets a checkpoint for the map."
-
+  top:
+    parkourname: "&a%map_id%"
+    your-pls: "&dYour position is &6#%parkour_pos% &f- with time &6%time%"
+    topPlayers:
+      - "%user_id_1% - %name_1% - %time_1%"
+      - "%user_id_2% - %name_2% - %time_2%"
+      - "%user_id_3% - %name_3% - %time_3%"
   setup-create:
     parkour-command-setup-create-success: "&aMap &f%map% &ahas been successfully created."
 

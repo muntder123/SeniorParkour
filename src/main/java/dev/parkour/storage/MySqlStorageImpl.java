@@ -11,12 +11,13 @@ import dev.parkour.api.users.User;
 import dev.parkour.core.users.UserImpl;
 import dev.parkour.records.MapRecord;
 import lombok.SneakyThrows;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.sql.*;
-import java.util.Properties;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 public class MySqlStorageImpl implements Storage<HikariDataSource> {
 
@@ -80,7 +81,12 @@ public class MySqlStorageImpl implements Storage<HikariDataSource> {
                         final ParkourMapManager mapRegistry = Parkour.getInstance().getManager();
                         final ParkourMap map = mapRegistry.getParkourMap(mapId);
                         if (map != null) {
-                            user.cacheData(map, lowestRecord, completions, gamesPlayed);
+                            CompletableFuture<Integer> playersWithBetterTimeCount = getPlayersWithBetterTimeCount(mapId, lowestRecord);
+                            try {
+                                user.cacheData(map, lowestRecord, completions, gamesPlayed, playersWithBetterTimeCount.get());
+                            }catch (Exception exception){
+                                throw new RuntimeException("could not load the betterCount" + exception);
+                            }
                         }
                     }
                 }
@@ -146,5 +152,39 @@ public class MySqlStorageImpl implements Storage<HikariDataSource> {
     @Override
     public CompletableFuture<Void> clearRecords(ParkourMap map) {
         return null;
+    }
+
+
+    @SneakyThrows
+    @Override
+    public Map<UUID,TopPlayerData> getTopPlayers(ParkourMap mapName){
+        Map<UUID,TopPlayerData> users = new HashMap<>();
+            if (mapName == null) {
+                return null;
+            }
+
+            try (Connection connection = hikariDataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement(
+                         "SELECT uuid, best_time_ms " +
+                                 "FROM park_completed_maps " +
+                                 "WHERE map_name = ? " +
+                                 "ORDER BY best_time_ms ASC LIMIT 200"
+                 )) {
+                statement.setString(1, mapName.id());
+                ResultSet resultSet = statement.executeQuery();
+                while (resultSet.next()) {
+                    // First, add the parkour name
+                    UUID uuid = UUID.fromString(resultSet.getString("uuid"));
+                    long time = resultSet.getLong("best_time_ms");
+                    UserImpl user = new UserImpl(uuid);
+                    String name = Bukkit.getOfflinePlayer(user.uuid()).getName();
+                    CompletableFuture<Integer> pos = getPlayersWithBetterTimeCount(mapName.id(), time);
+                    TopPlayerData topPlayerData = new TopPlayerData(uuid,name,time,pos.join());
+                    users.put(uuid,topPlayerData);
+                }
+            }catch (SQLException exception) {
+                throw new RuntimeException("Could not retrieve players count for " + mapName, exception);
+            }
+            return users;
     }
 }

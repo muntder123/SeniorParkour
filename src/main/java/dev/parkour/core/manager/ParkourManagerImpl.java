@@ -108,19 +108,22 @@ public class ParkourManagerImpl implements ParkourMapManager {
                         int order = checkPointMap.getOrder();
                         List<String> holoorderslist = config.getConfig().getStringList("checkpoint-hologram.hologram-name")
                                 .stream().map(s -> s.replace("%order%",String.valueOf(order))).collect(Collectors.toList());
-                        Holo orders = createHolo("orders-"+order, checkPointMap.getLocation());
+                        Location clone = checkPointMap.getLocation().clone();
+                        Holo orders = createHolo("orders-"+map.getId() +""+ order, clone.add(0,checkPointDouble,0));
                         orders.updateLines(holoorderslist);
                         orders.showAll();
                     });
 
                     List<String> stringList = config.getConfig().getStringList("start-hologram.hologram-name");
+                    Location startloc = startLocation.getLocation().clone();
                     Holo start = createHolo(Utils.color("start-holo"+map.getId()),
-                            startLocation.getLocation());
+                            startloc.add(0,startPointDouble,0));
                     start.updateLines(stringList);
                     start.showAll();
 
+                    Location clone = endLocation.getLocation().clone();
                     Holo end = createHolo(Utils.color("End-location"+map.getId()),
-                            endLocation.getLocation());
+                            clone.add(0,endPointDouble,0));
                     List<String> endList = config.getConfig().getStringList("end-hologram.hologram-name");
                     end.updateLines(endList);
                     end.showAll();
@@ -172,7 +175,7 @@ public class ParkourManagerImpl implements ParkourMapManager {
     }
 
     @Override
-    public void DeleteMap(ParkourMap parkourMap, boolean deleteFile) {
+    public void deleteMap(ParkourMap parkourMap, boolean deleteFile) {
         File dataFolder = instance.getDataFolder();
         File maps = new File(dataFolder, "maps");
         if (!maps.exists()) {
